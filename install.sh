@@ -1,17 +1,18 @@
 #!/bin/bash
 
 if [[ -x `command -v yum` ]]; then
-    yum -y install python34-pip
-    yum -y install npm
+    sudo yum -y install python34-pip
+    sudo yum -y install npm
+    sudo pip3 install virtualenv
 elif [[ -x `command -v brew` ]]; then
     brew install python3
     brew install npm
+    pip3 install virtualenv
 else
     echo "Platform not supported"
     exit
 fi
 
-pip3 install virtualenv
 
 virtualenv env --python=python3
 source env/bin/activate
