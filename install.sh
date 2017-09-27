@@ -3,7 +3,7 @@
 if [[ -x `command -v yum` ]]; then
     yum -y install python34-pip
     yum -y install npm
-elif [[ -x `command -v brew`]]; then
+elif [[ -x `command -v brew` ]]; then
     brew install python3
     brew install npm
 else
@@ -26,5 +26,12 @@ flask db init
 flask db migrate
 flask db upgrade
 
-gunicorn myflaskapp.app:create_app\(\) -b 0.0.0.0:80 -w 4
+gunicorn myflaskapp.app:create_app\(\) -b 0.0.0.0:8080 -w 4 &
 
+echo "Register the admin user, then press enter to continue..."
+read
+
+echo "Enter the flag:"
+read flag
+
+sqlite3 db.db "INSERT INTO userdata VALUES (0, 1, \"$flag\")"
