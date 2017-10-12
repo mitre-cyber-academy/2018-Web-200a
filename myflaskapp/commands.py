@@ -9,10 +9,30 @@ from flask import current_app
 from flask.cli import with_appcontext
 from werkzeug.exceptions import MethodNotAllowed, NotFound
 
+from .user.models import User, UserData
+from .extensions import db
+
 HERE = os.path.abspath(os.path.dirname(__file__))
 PROJECT_ROOT = os.path.join(HERE, os.pardir)
 TEST_PATH = os.path.join(PROJECT_ROOT, 'tests')
 
+@click.command()
+@click.option('-p', '--password')
+@with_appcontext
+def create_admin(password):
+    u = User('admin', 'admin@localhost', password, active=True, is_admin=True)
+    db.session.add(u)
+    db.session.commit()
+
+@click.command()
+@click.option('-u', '--username')
+@click.option('-d', '--data')
+@with_appcontext
+def add_userdata(username, data):
+    u = User.query.filter_by(username=username).first()
+    d = UserData(data, u.id)
+    db.session.add(d)
+    db.session.commit()
 
 @click.command()
 def test():
