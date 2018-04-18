@@ -54,10 +54,3 @@ def register():
     else:
         flash_errors(form)
     return render_template('public/register.html', form=form)
-
-
-@blueprint.route('/about/')
-def about():
-    """About page."""
-    form = LoginForm(request.form)
-    return render_template('public/about.html', form=form)

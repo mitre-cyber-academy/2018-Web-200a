@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
+
+import hashlib
+
 from flask import Flask, render_template
 
+from flask.sessions import SecureCookieSessionInterface
 from myflaskapp import commands, public, user
 from myflaskapp.extensions import bcrypt, cache, csrf_protect, db, debug_toolbar, login_manager, migrate, webpack
 from myflaskapp.settings import ProdConfig
 
+class BoilerplateSecureCookieSessionInterface(SecureCookieSessionInterface):
+    digest_method = staticmethod(hashlib.sha512)
 
 def create_app(config_object=ProdConfig):
     """An application factory, as explained here: http://flask.pocoo.org/docs/patterns/appfactories/.
@@ -13,6 +19,7 @@ def create_app(config_object=ProdConfig):
     :param config_object: The configuration object to use.
     """
     app = Flask(__name__.split('.')[0])
+    app.session_interface = BoilerplateSecureCookieSessionInterface()
     app.config.from_object(config_object)
     register_extensions(app)
     register_blueprints(app)
