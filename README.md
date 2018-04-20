@@ -17,7 +17,7 @@ There are a few steps to solving this challenge.
 		class BoilerplateSecureCookieSessionInterface(SecureCookieSessionInterface):
 		    digest_method = staticmethod(hashlib.sha512)
 
-		class SimpleSecureCookieSessionInterface(SecureCookieSessionInterface):
+		class SimpleSecureCookieSessionInterface(BoilerplateSecureCookieSessionInterface):
 			# Override method
 			# Take secret_key instead of an instance of a Flask app
 			def get_signing_serializer(self, secret_key):
